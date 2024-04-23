@@ -6,9 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="users")
@@ -27,6 +25,8 @@ public class ApplicationUser implements UserDetails {
     private String phone;
     private String avatarURL;
     private Boolean enabled = true;
+    private Date createdDate;
+    private Date changedPasswordDate;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -47,6 +47,8 @@ public class ApplicationUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.createdDate = this.getDate();
+        this.changedPasswordDate = this.getDate();
     }
 
     public ApplicationUser(String username, String fullName, String password, Set<Role> authorities, String email, String phone) {
@@ -56,15 +58,13 @@ public class ApplicationUser implements UserDetails {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
+        this.createdDate = this.getDate();
+        this.changedPasswordDate = this.getDate();
     }
 
-
-
-    public ApplicationUser(Long id, String username, String password, Set<Role> authorities) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.authorities = authorities;
+    private Date getDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTime();
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.pos.sale_dynamics.repository.VerificationTokenRepository;
 import com.pos.sale_dynamics.service.TokenService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import java.util.*;
 
 import com.pos.sale_dynamics.domain.Role;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.Option;
 

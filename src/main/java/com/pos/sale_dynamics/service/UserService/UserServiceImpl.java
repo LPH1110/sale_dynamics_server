@@ -6,14 +6,8 @@ import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
-import com.pos.sale_dynamics.service.TokenService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMailMessage;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -101,5 +95,15 @@ public class UserServiceImpl implements UserDetailsService {
         return new VerificationToken(token, user);
     }
 
+    public String changePassword(String username, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        ApplicationUser user = userRepository.findByUsername(username).get();
+        user.setPassword(encodedPassword);
+        Calendar calendar = Calendar.getInstance();
+        user.setChangedPasswordDate(calendar.getTime());
+        userRepository.save(user);
+
+        return "Password changed";
+    }
 
 }

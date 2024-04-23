@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Entity
 @Data
@@ -13,17 +15,37 @@ import lombok.Setter;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "product_id")
     private long id;
 
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "description")
     private String description;
+    private String provider;
 
-    public Product(String description, String name) {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    private String baseUnit;
+    private int salePrice;
+    private int comparedPrice;
+    private String sku;
+    private String barcode;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<Property> properties;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Product_Thumbnail",
+            joinColumns = {@JoinColumn(name="product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "thumbnail_id")}
+    )
+    private List<Thumbnail> thumbnails;
+
+    public Product(String name, String description) {
         this.description = description;
         this.name = name;
     }
 }
+
