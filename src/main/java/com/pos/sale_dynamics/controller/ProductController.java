@@ -1,18 +1,18 @@
 package com.pos.sale_dynamics.controller;
 
 import com.pos.sale_dynamics.service.ProductService.ProductServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin("*")
 public class ProductController {
-    private final ProductServiceImpl productService;
+    @Autowired
+    private ProductServiceImpl productService;
 
-    public ProductController(ProductServiceImpl productService) {
-        this.productService = productService;
-    }
 
     @GetMapping
     public List<ProductDTO> getAllProducts() {
@@ -20,7 +20,9 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public ProductDTO addProduct(ProductDTO productDTO) {
+    public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
+        System.out.println(productDTO.toString());
+
         return productService.addProduct(productDTO);
     }
 }

@@ -68,7 +68,7 @@ public class ApplicationUser implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Set<Role> getAuthorities() {
         return this.authorities;
     }
 

@@ -14,6 +14,10 @@ public class Thumbnail {
     @Column(name = "thumbnail_id")
     private long id;
     private String url;
+
+    public Thumbnail() {
+        this.url = "";
+    }
     public Thumbnail(String url) {
         this.url = url;
     }

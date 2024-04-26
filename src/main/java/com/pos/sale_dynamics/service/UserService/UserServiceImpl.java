@@ -3,11 +3,11 @@ package com.pos.sale_dynamics.service.UserService;
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.Role;
 import com.pos.sale_dynamics.domain.VerificationToken;
+import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,14 +31,22 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
-
-    @Autowired
-    private JavaMailSender mailSender;
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+    }
+
+    public Optional<ApplicationUser> updateInfo(String username, UserDTO userDTO) throws UsernameNotFoundException {
+        Optional<ApplicationUser> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            ApplicationUser founded = user.get();
+            founded.setFullName(userDTO.fullName());
+            founded.setEmail(userDTO.email());
+            founded.setPhone(userDTO.phone());
+            return Optional.of(userRepository.save(founded));
+        } else {
+            throw new UsernameNotFoundException("Username not found!");
+        }
     }
 
     public List<ApplicationUser> findAll() {

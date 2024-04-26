@@ -6,9 +6,9 @@ spring:
   application:
     name: sale_dynamics
   datasource:
-    url: jdbc:mysql://localhost:3306/sale_dynamics
-    username: root
-    password: root123
+    url: ${MYSQL_HOST_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:

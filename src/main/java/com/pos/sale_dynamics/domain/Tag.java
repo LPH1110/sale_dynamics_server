@@ -19,8 +19,24 @@ public class Tag {
     @JoinColumn(name = "property_id")
     private Property property;
 
-    public Tag(String name, Property property) {
+    public Tag() {
+        this.name = "";
+        this.property = null;
+    }
+
+    public Tag(String name) {
         this.name = name;
+    }
+
+    public void setProperty(Property property) {
+        if (property == null) {
+            if (this.property != null) {
+                this.property.getTags().remove(this);
+            }
+        } else {
+            property.getTags().add(this);
+        }
+
         this.property = property;
     }
 }

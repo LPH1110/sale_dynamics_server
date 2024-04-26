@@ -2,32 +2,47 @@ package com.pos.sale_dynamics.service.ProductService;
 
 import java.util.List;
 
-import com.pos.sale_dynamics.domain.Product;
+import com.pos.sale_dynamics.domain.*;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import com.pos.sale_dynamics.mapper.ProductDTOMapper;
 import com.pos.sale_dynamics.repository.ProductRepository;
+import com.pos.sale_dynamics.repository.PropertyRepository;
+import com.pos.sale_dynamics.repository.TagRepository;
+import com.pos.sale_dynamics.repository.ThumbnailRepository;
+import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private final ProductRepository productRepository;
-    private final ProductDTOMapper productMapper;
+    @Autowired
+    private ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductDTOMapper productMapper) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-    }
+    @Autowired
+    private ThumbnailRepository thumbnailRepository;
+
+    @Autowired
+    private PropertyRepository propertyRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private ProductDTOMapper productMapper;
+
+    @Autowired
+    private CloudinaryServiceImpl cloudinaryService;
+
     @Override
     public List<ProductDTO> findAll() {
-        return productRepository.findAll().stream().map(productMapper).collect(Collectors.toList());
+        return productRepository.findAll().stream().map(product -> productMapper.apply(product)).toList();
     }
 
     @Override
     public ProductDTO addProduct(ProductDTO productDTO) {
         Product product = productMapper.mapToProduct(productDTO);
-        productRepository.save(product);
-        return productDTO;
+        return productMapper.apply(productRepository.save(product));
     }
 }

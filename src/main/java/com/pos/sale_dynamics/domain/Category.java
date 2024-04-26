@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,4 +23,13 @@ public class Category {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Product> products;
+
+    public Category() {
+        this.name = "";
+        this.products = new ArrayList<>();
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

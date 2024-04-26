@@ -2,6 +2,7 @@ package com.pos.sale_dynamics.controller;
 
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.dto.ChangePasswordRequestDTO;
+import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,14 @@ public class UserController {
         System.out.println(username);
         return userService.findByUsername(username);
     }
-
     @PostMapping("/change-password")
     public String changePassword(@RequestBody ChangePasswordRequestDTO request) {
         return userService.changePassword(request.getUsername(), request.getNewPassword());
+    }
+
+    @PostMapping("/update")
+    public Optional<ApplicationUser> updateInfo(@RequestParam String username, @RequestBody UserDTO userDTO) {
+        return userService.updateInfo(username, userDTO);
     }
 
 

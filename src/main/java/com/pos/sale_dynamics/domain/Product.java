@@ -1,10 +1,12 @@
 package com.pos.sale_dynamics.domain;
 
+import com.pos.sale_dynamics.dto.PropertyDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,7 +14,7 @@ import java.util.List;
 @Data
 @Setter
 @Table(name = "products")
-public class Product {
+    public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -29,23 +31,43 @@ public class Product {
     private String baseUnit;
     private int salePrice;
     private int comparedPrice;
+
+    @Column(unique = true)
     private String sku;
+    @Column(unique = true)
     private String barcode;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private List<Property> properties;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Property> properties= new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "Product_Thumbnail",
             joinColumns = {@JoinColumn(name="product_id")},
             inverseJoinColumns = {@JoinColumn(name = "thumbnail_id")}
     )
-    private List<Thumbnail> thumbnails;
+    private List<Thumbnail> thumbnails = new ArrayList<>();
 
-    public Product(String name, String description) {
-        this.description = description;
+    public Product(
+            String name,
+            String description,
+            String provider,
+            Category category,
+            String baseUnit,
+            int salePrice,
+            int comparedPrice,
+            String sku,
+            String barcode
+    ) {
         this.name = name;
+        this.description = description;
+        this.provider = provider;
+        this.category = category;
+        this.baseUnit = baseUnit;
+        this.salePrice = salePrice;
+        this.comparedPrice = comparedPrice;
+        this.sku = sku;
+        this.barcode = barcode;
     }
 }
 
