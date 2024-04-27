@@ -1,6 +1,5 @@
 package com.pos.sale_dynamics.domain;
 
-import com.pos.sale_dynamics.dto.PropertyDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -8,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -16,9 +16,9 @@ import java.util.List;
 @Table(name = "products")
     public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "product_id")
-    private long id;
+    private String id;
 
     private String name;
     private String description;
@@ -34,7 +34,7 @@ import java.util.List;
 
     @Column(unique = true)
     private String sku;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String barcode;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -59,6 +59,7 @@ import java.util.List;
             String sku,
             String barcode
     ) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
         this.provider = provider;
@@ -68,6 +69,19 @@ import java.util.List;
         this.comparedPrice = comparedPrice;
         this.sku = sku;
         this.barcode = barcode;
+    }
+
+    public Product() {
+        this.id = null;
+        this.name = null;
+        this.description = null;
+        this.provider = null;
+        this.category = null;
+        this.baseUnit = null;
+        this.salePrice = 0;
+        this.comparedPrice = 0;
+        this.sku = null;
+        this.barcode = null;
     }
 }
 

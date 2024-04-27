@@ -22,7 +22,11 @@ public class ProductController {
     @PostMapping("/save")
     public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
         System.out.println(productDTO.toString());
-
         return productService.addProduct(productDTO);
+    }
+
+    @GetMapping("/detail")
+    public ProductDTO getDetail(@RequestParam String barcode) {
+        return productService.findByBarcode(barcode);
     }
 }

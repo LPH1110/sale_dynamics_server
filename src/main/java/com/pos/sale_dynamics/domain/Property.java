@@ -31,20 +31,10 @@ public class Property {
         this.product = null;
     }
 
-    public Property(String name) {
-        super();
+    public Property(String name, Product product) {
         this.name = name;
-    }
-
-    public void setProduct(Product product) {
-        if (product == null) {
-            if (this.product != null) {
-                this.product.getProperties().remove(this);
-            }
-        } else {
-            product.getProperties().add(this);
-        }
         this.product = product;
     }
+
 
 }

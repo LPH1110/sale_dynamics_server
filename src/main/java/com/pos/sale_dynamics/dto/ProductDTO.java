@@ -43,10 +43,10 @@ public record ProductDTO(
         return baseUnit;
     }
     public String sku() {
-        return baseUnit;
+        return sku;
     }
     public String barcode() {
-        return baseUnit;
+        return barcode;
     }
     public int salePrice() {
         return salePrice;

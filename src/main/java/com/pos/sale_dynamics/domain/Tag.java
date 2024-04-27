@@ -24,19 +24,9 @@ public class Tag {
         this.property = null;
     }
 
-    public Tag(String name) {
+    public Tag(String name, Property property) {
         this.name = name;
-    }
-
-    public void setProperty(Property property) {
-        if (property == null) {
-            if (this.property != null) {
-                this.property.getTags().remove(this);
-            }
-        } else {
-            property.getTags().add(this);
-        }
-
         this.property = property;
     }
+
 }

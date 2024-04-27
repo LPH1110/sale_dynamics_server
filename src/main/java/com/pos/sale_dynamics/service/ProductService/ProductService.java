@@ -8,4 +8,6 @@ import java.util.List;
     public interface ProductService {
         List<ProductDTO> findAll();
         ProductDTO addProduct(ProductDTO productDTO);
+
+        ProductDTO findByBarcode(String barcode);
 }

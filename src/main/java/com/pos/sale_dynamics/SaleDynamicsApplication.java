@@ -1,7 +1,9 @@
 package com.pos.sale_dynamics;
 
 import com.pos.sale_dynamics.domain.ApplicationUser;
+import com.pos.sale_dynamics.domain.Category;
 import com.pos.sale_dynamics.domain.Role;
+import com.pos.sale_dynamics.repository.CategoryRepository;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.service.AuthenticationService.AuthenticationService;
@@ -11,6 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -23,6 +27,9 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 
 
@@ -44,6 +51,16 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 			userRepository.save(user);
 		}
 
+		List<Category> categories = new ArrayList<>();
+		categories.add(new Category("shoes"));
+		categories.add(new Category("electronics"));
+		categories.add(new Category("kitchen"));
+
+		categories.forEach(category -> {
+			if (categoryRepository.findByName(category.getName()).isEmpty()) {
+				categoryRepository.save(category);
+			}
+		});
 	}
 
 	public static void main(String[] args) {

@@ -13,7 +13,6 @@ import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -44,5 +43,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO addProduct(ProductDTO productDTO) {
         Product product = productMapper.mapToProduct(productDTO);
         return productMapper.apply(productRepository.save(product));
+    }
+
+    @Override
+    public ProductDTO findByBarcode(String barcode) {
+        Product product = productRepository.findByBarcode(barcode).get();
+        return productMapper.apply(product);
     }
 }
