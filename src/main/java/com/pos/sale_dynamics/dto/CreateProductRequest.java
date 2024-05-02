@@ -1,13 +1,11 @@
 package com.pos.sale_dynamics.dto;
 
 
-import com.pos.sale_dynamics.domain.Category;
-import com.pos.sale_dynamics.domain.Thumbnail;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public record ProductDTO(
+public record CreateProductRequest(
          String name,
          String description,
          String provider,
@@ -15,7 +13,6 @@ public record ProductDTO(
          String baseUnit,
          String sku,
          String barcode,
-         List<Thumbnail> thumbnails,
          List<PropertyDTO> properties,
          int salePrice,
          int comparedPrice
@@ -33,7 +30,6 @@ public record ProductDTO(
         return provider;
     }
 
-    public List<Thumbnail> thumbnails() {return thumbnails ;}
 
     public List<PropertyDTO> properties() {return properties ;}
 

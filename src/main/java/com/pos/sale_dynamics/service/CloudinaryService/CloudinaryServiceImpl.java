@@ -1,8 +1,12 @@
 package com.pos.sale_dynamics.service.CloudinaryService;
 
 import com.cloudinary.utils.ObjectUtils;
+import com.pos.sale_dynamics.responses.CldUploadResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -14,32 +18,21 @@ import java.util.Objects;
 
 import com.cloudinary.*;
 
-@Component
+@Service
+@RequiredArgsConstructor
 public class CloudinaryServiceImpl implements CloudinaryService {
-    Cloudinary cloudinary;
-    @Value("${CLOUDINARY_NAME}")
-    private String CLOUDINARY_NAME;
-    @Value("${CLOUDINARY_API_KEY}")
-    private String CLOUDINARY_API_KEY;
-    @Value("${CLOUDINARY_API_SECRET}")
-    private  String CLOUDINARY_API_SECRET;
 
-    public CloudinaryServiceImpl() {
-        this.cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", this.CLOUDINARY_NAME,
-                "api_key", this.CLOUDINARY_API_KEY,
-                "api_secret", this.CLOUDINARY_API_SECRET
-        ));
-    }
+    @Autowired
+    private final Cloudinary cloudinary;
 
     @Override
-    public Map upload(MultipartFile multipartFile) throws IOException {
+    public CldUploadResponse upload(MultipartFile multipartFile) throws IOException {
         File file = convert(multipartFile);
         Map result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
         if (!Files.deleteIfExists(file.toPath())) {
             throw new IOException("Failed to delete temporary file: " + file.getAbsolutePath());
         }
-        return result;
+        return new CldUploadResponse(result.get("public_id").toString(), result.get("url").toString());
     }
 
     @Override

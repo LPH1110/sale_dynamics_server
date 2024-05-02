@@ -3,11 +3,14 @@ package com.pos.sale_dynamics.service.AuthenticationService;
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.dto.LoginResponseDTO;
+import com.pos.sale_dynamics.dto.TokenVerifyResponse;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
 import com.pos.sale_dynamics.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -67,7 +70,7 @@ public class AuthenticationService {
         }
     }
 
-    public String verifyToken(String token) throws NoSuchElementException {
+    public ResponseEntity<TokenVerifyResponse> verifyToken(String token) throws NoSuchElementException {
 
         try {
             VerificationToken verifyToken = verificationTokenRepository.findByToken(token).get();
@@ -76,15 +79,19 @@ public class AuthenticationService {
 
             if (time.getTime() - calendar.getTime().getTime() <= 0) {
                 verificationTokenRepository.delete(verifyToken);
-                return "Token is already expired";
+                TokenVerifyResponse response = new TokenVerifyResponse(verifyToken.getUser().getEnabled(), true, "Token is already expired");
+
+                return new ResponseEntity<>(response, HttpStatus.GONE);
             } else {
                 ApplicationUser user = verifyToken.getUser();
                 user.setEnabled(true);
                 userRepository.save(user);
-                return "activated";
+                TokenVerifyResponse response = new TokenVerifyResponse(user.getEnabled(), false, "Account activated successfully");
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
         } catch (NoSuchElementException e) {
-            throw new NoSuchElementException("Verification token not found");
+            TokenVerifyResponse response = new TokenVerifyResponse(false, false, "Token not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }

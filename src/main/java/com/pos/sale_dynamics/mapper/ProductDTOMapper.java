@@ -5,9 +5,13 @@ import com.pos.sale_dynamics.dto.ProductDTO;
 import com.pos.sale_dynamics.dto.PropertyDTO;
 import com.pos.sale_dynamics.repository.*;
 import com.pos.sale_dynamics.service.CategoryService.CategoryServiceImpl;
+import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.IOUtils;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.function.Function;
 
@@ -28,10 +32,12 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
     @Autowired
     private CategoryServiceImpl categoryService;
 
+    @Autowired
+    private CloudinaryServiceImpl cloudinaryService;
+
 
     @Override
     public ProductDTO apply(Product product) {
-        List<String> thumbnails = product.getThumbnails().stream().map(Thumbnail::getUrl).toList();
         List<PropertyDTO> properties = product.getProperties().stream().map(Property -> {
             List<String> tags = Property.getTags().stream().map(Tag::getName).toList();
             return new PropertyDTO(Property.getName(), tags);
@@ -45,7 +51,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                 product.getBaseUnit(),
                 product.getSku(),
                 product.getBarcode(),
-                thumbnails,
+                product.getThumbnails(),
                 properties,
                 product.getSalePrice(),
                 product.getComparedPrice()
@@ -68,11 +74,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                 productDTO.barcode()
         ));
 
-        //thumbnails
-        productDTO.thumbnails().forEach(url -> {
-            Thumbnail thumbnail = thumbnailRepository.save(new Thumbnail(url));
-            product.getThumbnails().add(thumbnail);
-        });
+
 
         productDTO
                 .properties()
@@ -85,6 +87,14 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                     propertyRepository.save(property);
                     product.getProperties().add(property);
                 });
+
         return product;
     }
+
+    private MultipartFile blobUrlToMultipartFile(String blobUrl) throws Exception {
+        InputStream in = new URL(blobUrl).openStream();
+        byte[] bytes = IOUtils.toByteArray(in);
+        return new BASE64DecodedMultipartFile(bytes);
+    }
+
 }

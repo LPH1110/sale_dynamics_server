@@ -55,6 +55,8 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 		categories.add(new Category("shoes"));
 		categories.add(new Category("electronics"));
 		categories.add(new Category("kitchen"));
+		categories.add(new Category("clothe"));
+		categories.add(new Category("default"));
 
 		categories.forEach(category -> {
 			if (categoryRepository.findByName(category.getName()).isEmpty()) {
