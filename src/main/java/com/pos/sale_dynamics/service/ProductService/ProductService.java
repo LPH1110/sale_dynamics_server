@@ -1,5 +1,6 @@
 package com.pos.sale_dynamics.service.ProductService;
 
+import com.pos.sale_dynamics.domain.Product;
 import com.pos.sale_dynamics.domain.Thumbnail;
 import com.pos.sale_dynamics.dto.CreateProductRequest;
 import com.pos.sale_dynamics.dto.ProductDTO;
@@ -16,6 +17,8 @@ import java.util.List;
         List<ProductDTO> findAll();
 
         ProductDTO addProduct(CreateProductRequest createProductRequest);
+
+        List<ProductDTO> findByNameContaining(String infix);
 
         ProductDTO findByBarcode(String barcode);
 

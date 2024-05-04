@@ -48,6 +48,17 @@ import java.util.UUID;
     )
     private List<Thumbnail> thumbnails = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Product_Variant",
+            joinColumns = {@JoinColumn(name="product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "variant_id")}
+    )
+    private List<Variant> variant;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<OrderItem> orderItems;
+
     public Product(
             String name,
             String description,

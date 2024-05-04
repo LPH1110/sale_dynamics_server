@@ -51,6 +51,11 @@ public class ProductServiceImpl implements ProductService {
     private CategoryRepository categoryRepository;
 
     @Override
+    public List<ProductDTO> findByNameContaining(String infix) {
+        return productRepository.findByNameContaining(infix).stream().map(product -> productMapper.apply(product)).toList();
+    }
+
+    @Override
     @Transactional
     public ResponseEntity<ProductDTO> updateProduct(ProductDTO productDTO) {
         Optional<Product> productRecord = productRepository.findByBarcode(productDTO.barcode());

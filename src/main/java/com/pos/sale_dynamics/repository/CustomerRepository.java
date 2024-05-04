@@ -1,0 +1,17 @@
+package com.pos.sale_dynamics.repository;
+
+import com.pos.sale_dynamics.domain.Customer;
+import com.pos.sale_dynamics.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    @Override
+    List<Customer> findAll();
+
+    @Query("SELECT c FROM Customer c WHERE c.firstname LIKE %:infix% OR c.lastname LIKE %:infix% OR c.email LIKE %:infix% OR c.phone LIKE %:infix% ORDER BY id LIMIT 50")
+    List<Customer> findByNameContaining(@Param("infix") String infix);
+}

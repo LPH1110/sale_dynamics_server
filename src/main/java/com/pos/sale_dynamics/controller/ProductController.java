@@ -30,6 +30,11 @@ public class ProductController {
         return productService.findAll();
     }
 
+    @GetMapping("/keyword")
+    public List<ProductDTO> findByKeyword(@RequestParam String infix) {
+        return productService.findByNameContaining(infix);
+    }
+
     @PostMapping("/save")
     public ProductDTO addProduct(@RequestBody CreateProductRequest createProductRequest) {
         return productService.addProduct(createProductRequest);

@@ -1,0 +1,70 @@
+package com.pos.sale_dynamics.domain;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Getter
+@Entity
+@Data
+@Setter
+@Table(name = "orders")
+public class Order {
+    @Id
+    @Column(name = "category_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String description;
+
+    @Column(nullable = false)
+    private int total;
+
+    @Column(nullable = false)
+    private int received;
+
+    @Column(nullable = false)
+    private int excess;
+
+    private boolean confirmed;
+
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_status_id")
+    private OrderStatus orderStatus;
+
+    private Date createdDate;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    public Order() {
+        this.description = "";
+        this.total = 0;
+        this.received = 0;
+        this.excess = 0;
+        this.orderStatus = null;
+        this.createdDate = null;
+        this.confirmed = false;
+    }
+    public Order(String description, int total, int received, int excess, OrderStatus orderStatus) {
+        this.description = description;
+        this.total = total;
+        this.received = received;
+        this.excess = excess;
+        this.orderStatus = orderStatus;
+        this.orderItems = new ArrayList<>();
+        this.createdDate = new Date();
+        this.confirmed = false;
+    }
+}

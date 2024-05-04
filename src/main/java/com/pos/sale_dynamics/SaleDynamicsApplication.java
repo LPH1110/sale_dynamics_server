@@ -1,9 +1,8 @@
 package com.pos.sale_dynamics;
 
-import com.pos.sale_dynamics.domain.ApplicationUser;
-import com.pos.sale_dynamics.domain.Category;
-import com.pos.sale_dynamics.domain.Role;
+import com.pos.sale_dynamics.domain.*;
 import com.pos.sale_dynamics.repository.CategoryRepository;
+import com.pos.sale_dynamics.repository.OrderStatusRepository;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.service.AuthenticationService.AuthenticationService;
@@ -31,10 +30,14 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	@Autowired
+	private OrderStatusRepository orderStatusRepository;
+
 
 
 	@Override
 	public void run(String... args) throws Exception {
+		// INIT ROLES
 		Role adminRole = null;
 		if (roleRepository.findByAuthority("ADMIN").isEmpty()) {
 			adminRole = roleRepository.save(new Role("ADMIN"));
@@ -44,13 +47,14 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 			roleRepository.save(new Role("USER"));
 		}
 
-
+		// INIT ADMIN ACCOUNT
 		if(userRepository.findByUsername("admin").isEmpty()) {
 			ApplicationUser user = authenticationService.registerUser("admin", "admin");
 			user.getAuthorities().add(adminRole);
 			userRepository.save(user);
 		}
 
+		// INIT CATEGORIES
 		List<Category> categories = new ArrayList<>();
 		categories.add(new Category("shoes"));
 		categories.add(new Category("electronics"));
@@ -61,6 +65,18 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 		categories.forEach(category -> {
 			if (categoryRepository.findByName(category.getName()).isEmpty()) {
 				categoryRepository.save(category);
+			}
+		});
+
+		// INIT ORDER STATUSES
+		List<OrderStatus> statuses = new ArrayList<>();
+		statuses.add(new OrderStatus("In progress")); // Not confirm
+		statuses.add(new OrderStatus("Partial paid")); // Customer only doesn't pay enough
+		statuses.add(new OrderStatus("Paid"));
+
+		statuses.forEach(status -> {
+			if (orderStatusRepository.findByTitle(status.getTitle()).isEmpty()) {
+				orderStatusRepository.save(status);
 			}
 		});
 	}

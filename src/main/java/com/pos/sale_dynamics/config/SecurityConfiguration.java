@@ -78,7 +78,10 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll();
             auth.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN");
-            auth.requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyRole("ADMIN", "USER");
+            auth.requestMatchers(new AntPathRequestMatcher("/user/**")).hasAnyRole( "ADMIN", "USER");
+            auth.requestMatchers(new AntPathRequestMatcher("/products/**")).hasAnyRole("ADMIN", "USER");
+            auth.requestMatchers(new AntPathRequestMatcher("/orders/**")).hasAnyRole("ADMIN", "USER");
+            auth.requestMatchers(new AntPathRequestMatcher("/customers/**")).hasAnyRole("ADMIN", "USER");
             auth.anyRequest().authenticated();
         });
 
