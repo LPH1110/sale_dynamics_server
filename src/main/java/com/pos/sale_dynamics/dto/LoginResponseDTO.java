@@ -7,11 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginResponseDTO {
-    private ApplicationUser user;
+    private UserDTO userDTO;
     private String jwt;
 
-    public LoginResponseDTO(ApplicationUser user, String jwt) {
-        this.user = user;
+    public LoginResponseDTO(UserDTO userDTO, String jwt) {
+        this.userDTO = userDTO;
         this.jwt = jwt;
     }
 }

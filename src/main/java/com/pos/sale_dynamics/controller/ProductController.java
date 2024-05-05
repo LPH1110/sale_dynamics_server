@@ -1,9 +1,8 @@
 package com.pos.sale_dynamics.controller;
 
-import com.pos.sale_dynamics.domain.Product;
 import com.pos.sale_dynamics.domain.Thumbnail;
-import com.pos.sale_dynamics.dto.CreateProductRequest;
-import com.pos.sale_dynamics.dto.DeleteThumbnailRequest;
+import com.pos.sale_dynamics.requests.CreateProductRequest;
+import com.pos.sale_dynamics.requests.DeleteThumbnailRequest;
 import com.pos.sale_dynamics.service.ProductService.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.util.List;
 

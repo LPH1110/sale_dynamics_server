@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +18,10 @@ import java.util.List;
 @Table(name = "orders")
 public class Order {
     @Id
-    @Column(name = "category_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "order_id")
+    @GenericGenerator(name="order_id_gen", type = com.pos.sale_dynamics.generators.OrderIdGenerator.class)
+    @GeneratedValue(generator="order_id_gen")
+    private String id;
 
     private String description;
 
@@ -32,6 +34,10 @@ public class Order {
     @Column(nullable = false)
     private int excess;
 
+    @Column
+    private int customerOwed;
+
+    @Getter
     private boolean confirmed;
 
 
@@ -48,23 +54,33 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private ApplicationUser issuer;
+
     public Order() {
         this.description = "";
         this.total = 0;
         this.received = 0;
         this.excess = 0;
+        this.customerOwed = 0;
         this.orderStatus = null;
         this.createdDate = null;
+        this.issuer = null;
         this.confirmed = false;
     }
-    public Order(String description, int total, int received, int excess, OrderStatus orderStatus) {
+
+    public Order(String description, int total, int received, int excess, int customerOwed) {
         this.description = description;
         this.total = total;
         this.received = received;
         this.excess = excess;
-        this.orderStatus = orderStatus;
+        this.customerOwed = customerOwed;
+        this.orderStatus = null;
         this.orderItems = new ArrayList<>();
         this.createdDate = new Date();
         this.confirmed = false;
+        this.issuer = null;
     }
+
 }

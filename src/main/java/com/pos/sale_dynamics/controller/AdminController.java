@@ -2,6 +2,7 @@ package com.pos.sale_dynamics.controller;
 
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.VerificationToken;
+import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public List<ApplicationUser> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.findAll();
     }
 

@@ -1,18 +1,48 @@
 package com.pos.sale_dynamics.dto;
 
+import java.util.Date;
+import java.util.List;
+
 public record OrderDTO(
-        long id,
+        String id,
         int total,
         int received,
         int excess,
 
+        int customerOwed,
+
+        Date createdDate,
+
+        String status,
+
+        CustomerDTO customer,
+
+        List<OrderItemDTO> orderItems,
+
         boolean confirmed,
 
-        String description
+        String description,
+
+        String issuer
 ) {
 
     @Override
-    public long id() {
+    public CustomerDTO customer() {
+        return customer;
+    }
+
+    @Override
+    public List<OrderItemDTO> orderItems() {
+        return orderItems;
+    }
+
+    @Override
+    public String status() {
+        return status;
+    }
+
+    @Override
+    public String id() {
         return id;
     }
 
@@ -27,8 +57,18 @@ public record OrderDTO(
     }
 
     @Override
+    public Date createdDate() {
+        return createdDate;
+    }
+
+    @Override
     public int excess() {
         return excess;
+    }
+
+    @Override
+    public int customerOwed() {
+        return customerOwed;
     }
 
     @Override
@@ -39,5 +79,10 @@ public record OrderDTO(
     @Override
     public String description() {
         return description;
+    }
+
+    @Override
+    public String issuer() {
+        return issuer;
     }
 }

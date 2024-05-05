@@ -8,9 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
-    List<Order> findAll();
+    ResponseEntity<String> confirmOrder(String orderId);
 
-    ResponseEntity<Order> findById(long orderId);
+    List<OrderDTO> findAll();
 
-    Order createOrder(OrderDTO orderDTO);
+    ResponseEntity<OrderDTO> findById(String orderId);
+
+    ResponseEntity<OrderDTO> createOrder(OrderDTO orderDTO);
+
+    ResponseEntity<OrderDTO> payOrder(String orderId, int received, int excess, int customerOwed);
 }

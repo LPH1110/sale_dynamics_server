@@ -37,6 +37,9 @@ public class ApplicationUser implements UserDetails {
     )
     private Set<Role> authorities;
 
+    @OneToMany(mappedBy = "issuer", cascade = CascadeType.ALL)
+    private List<Order> orders;
+
 
     public ApplicationUser() {
         super();

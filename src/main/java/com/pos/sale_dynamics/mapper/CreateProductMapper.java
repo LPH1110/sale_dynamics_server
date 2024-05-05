@@ -1,8 +1,7 @@
 package com.pos.sale_dynamics.mapper;
 
 import com.pos.sale_dynamics.domain.*;
-import com.pos.sale_dynamics.dto.CreateProductRequest;
-import com.pos.sale_dynamics.dto.ProductDTO;
+import com.pos.sale_dynamics.requests.CreateProductRequest;
 import com.pos.sale_dynamics.repository.ProductRepository;
 import com.pos.sale_dynamics.repository.PropertyRepository;
 import com.pos.sale_dynamics.repository.TagRepository;
@@ -12,7 +11,6 @@ import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.function.Function;
 
 @Service

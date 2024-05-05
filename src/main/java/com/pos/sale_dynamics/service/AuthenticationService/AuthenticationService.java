@@ -4,6 +4,7 @@ import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.dto.LoginResponseDTO;
 import com.pos.sale_dynamics.dto.TokenVerifyResponse;
+import com.pos.sale_dynamics.mapper.UserDTOMapper;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
@@ -45,6 +46,9 @@ public class AuthenticationService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UserDTOMapper userDTOMapper;
+
     public ApplicationUser registerUser(String username, String password) {
         String encodedPassword = passwordEncoder.encode(password.isEmpty() ? "123" : password);
         Role userRole = roleRepository.findByAuthority("USER").get();
@@ -62,7 +66,7 @@ public class AuthenticationService {
             Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateToken(auth);
             ApplicationUser user = userRepository.findByUsername(username).get();
-            return new LoginResponseDTO(user, token);
+            return new LoginResponseDTO(userDTOMapper.apply(user), token);
 
         } catch (AuthenticationException e) {
             System.out.println(e.getMessage());

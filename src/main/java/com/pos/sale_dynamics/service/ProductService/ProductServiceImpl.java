@@ -1,27 +1,23 @@
 package com.pos.sale_dynamics.service.ProductService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.pos.sale_dynamics.domain.*;
-import com.pos.sale_dynamics.dto.CreateProductRequest;
+import com.pos.sale_dynamics.requests.CreateProductRequest;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import com.pos.sale_dynamics.mapper.CreateProductMapper;
 import com.pos.sale_dynamics.mapper.ProductDTOMapper;
 import com.pos.sale_dynamics.repository.*;
 import com.pos.sale_dynamics.responses.CldUploadResponse;
 import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
-import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.swing.text.html.Option;
 
 
 @Service

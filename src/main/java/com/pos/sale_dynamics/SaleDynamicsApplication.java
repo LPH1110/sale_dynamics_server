@@ -51,6 +51,8 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 		if(userRepository.findByUsername("admin").isEmpty()) {
 			ApplicationUser user = authenticationService.registerUser("admin", "admin");
 			user.getAuthorities().add(adminRole);
+			user.setFullName("Le Phu Hao");
+			user.setPhone("0935572755");
 			userRepository.save(user);
 		}
 

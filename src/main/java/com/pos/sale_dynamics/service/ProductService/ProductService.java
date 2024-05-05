@@ -1,8 +1,7 @@
 package com.pos.sale_dynamics.service.ProductService;
 
-import com.pos.sale_dynamics.domain.Product;
 import com.pos.sale_dynamics.domain.Thumbnail;
-import com.pos.sale_dynamics.dto.CreateProductRequest;
+import com.pos.sale_dynamics.requests.CreateProductRequest;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

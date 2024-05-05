@@ -4,10 +4,13 @@ import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.Role;
 import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.dto.UserDTO;
+import com.pos.sale_dynamics.mapper.UserDTOMapper;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +34,9 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
+    @Autowired
+    private UserDTOMapper userDTOMapper;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
@@ -49,11 +55,17 @@ public class UserServiceImpl implements UserDetailsService {
         }
     }
 
-    public List<ApplicationUser> findAll() {
-        return userRepository.findAll();
+    public List<UserDTO> findAll() {
+        return userRepository.findAll().stream().map(user -> userDTOMapper.apply(user)).toList();
     }
-    public Optional<ApplicationUser> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public ResponseEntity<UserDTO> findByUsername(String username) {
+        Optional<ApplicationUser> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            System.out.println("In user service, user not found with username: " + username);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(userDTOMapper.apply(user.get()), HttpStatus.OK);
     }
 
     public VerificationToken createUser(String fullName, String email, String password, String phone) {

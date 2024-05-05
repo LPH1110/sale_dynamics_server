@@ -5,6 +5,7 @@ import com.pos.sale_dynamics.dto.ChangePasswordRequestDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -18,8 +19,7 @@ public class UserController {
     private UserServiceImpl userService;
 
     @GetMapping("/detail")
-    public Optional<ApplicationUser> getInfo(@RequestParam String username) {
-        System.out.println(username);
+    public ResponseEntity<UserDTO> getInfo(@RequestParam String username) {
         return userService.findByUsername(username);
     }
     @PostMapping("/change-password")

@@ -1,4 +1,4 @@
-package com.pos.sale_dynamics.dto;
+package com.pos.sale_dynamics.requests;
 
 public record DeleteThumbnailRequest(
         String barcode,

@@ -1,6 +1,7 @@
-package com.pos.sale_dynamics.dto;
+package com.pos.sale_dynamics.requests;
 
 
+import com.pos.sale_dynamics.dto.PropertyDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Override
@@ -14,4 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE c.firstname LIKE %:infix% OR c.lastname LIKE %:infix% OR c.email LIKE %:infix% OR c.phone LIKE %:infix% ORDER BY id LIMIT 50")
     List<Customer> findByNameContaining(@Param("infix") String infix);
+
+    @Query("SELECT c FROM Customer c WHERE c.phone=?1")
+    Optional<Customer> findByPhone(String phone);
 }
