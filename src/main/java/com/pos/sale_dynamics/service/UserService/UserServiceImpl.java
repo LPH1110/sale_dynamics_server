@@ -3,7 +3,9 @@ package com.pos.sale_dynamics.service.UserService;
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.Role;
 import com.pos.sale_dynamics.domain.VerificationToken;
+import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
+import com.pos.sale_dynamics.mapper.OrderDTOMapper;
 import com.pos.sale_dynamics.mapper.UserDTOMapper;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
@@ -37,6 +39,13 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private UserDTOMapper userDTOMapper;
 
+    @Autowired
+    private OrderDTOMapper orderDTOMapper;
+
+    public List<OrderDTO> findOrdersByUsername(String username) {
+        Optional<ApplicationUser> user = userRepository.findByUsername(username);
+        return user.map(applicationUser -> applicationUser.getOrders().stream().map(order -> orderDTOMapper.apply(order)).toList()).orElse(null);
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
@@ -71,12 +80,13 @@ public class UserServiceImpl implements UserDetailsService {
     public VerificationToken createUser(String fullName, String email, String password, String phone) {
         // Encode password
         String encodedPassword = passwordEncoder.encode(password.isEmpty() ? "123" : password);
+        String username = email.split("@")[0];
         // Add role
         Role userRole = roleRepository.findByAuthority("USER").get();
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
         // Create instance
-        ApplicationUser newUser = new ApplicationUser(email, fullName, encodedPassword, authorities, email, phone);
+        ApplicationUser newUser = new ApplicationUser(username, fullName, encodedPassword, authorities, email, phone);
         newUser.setEnabled(false);
         System.out.println("In user service, registering: " + newUser);
 

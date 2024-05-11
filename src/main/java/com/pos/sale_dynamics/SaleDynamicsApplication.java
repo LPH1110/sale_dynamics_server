@@ -6,7 +6,6 @@ import com.pos.sale_dynamics.repository.OrderStatusRepository;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.service.AuthenticationService.AuthenticationService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 public class SaleDynamicsApplication implements CommandLineRunner {
@@ -86,6 +84,8 @@ public class SaleDynamicsApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(SaleDynamicsApplication.class, args);
 	}
+
+
 
 
 }

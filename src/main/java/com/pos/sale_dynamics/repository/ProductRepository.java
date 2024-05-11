@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product,String> {
     List<Product> findAll();
 
-    @Query("SELECT p FROM Product p WHERE p.name LIKE %:infix% ORDER BY id LIMIT 50")
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %:infix% OR p.barcode LIKE %:infix% OR p.sku LIKE %:infix% ORDER BY id LIMIT 50")
     List<Product> findByNameContaining(@Param("infix") String infix);
 
     Optional<Product> findByBarcode(String barcode);

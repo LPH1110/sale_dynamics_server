@@ -9,7 +9,8 @@ public record UserDTO (
         String username,
         String email,
         String phone,
-        List<Role> authorities
+        List<Role> authorities,
+        List<OrderDTO> orders
 ) {
     @Override
     public String fullName() {
@@ -34,5 +35,10 @@ public record UserDTO (
     @Override
     public List<Role> authorities() {
         return authorities;
+    }
+
+    @Override
+    public List<OrderDTO> orders() {
+        return orders;
     }
 }

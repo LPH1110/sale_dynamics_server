@@ -2,12 +2,14 @@ package com.pos.sale_dynamics.controller;
 
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.dto.ChangePasswordRequestDTO;
+import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +32,11 @@ public class UserController {
     @PostMapping("/update")
     public Optional<ApplicationUser> updateInfo(@RequestParam String username, @RequestBody UserDTO userDTO) {
         return userService.updateInfo(username, userDTO);
+    }
+
+    @GetMapping("/orders")
+    public List<OrderDTO> getOrders(@RequestParam String username) {
+        return userService.findOrdersByUsername(username);
     }
 
 
