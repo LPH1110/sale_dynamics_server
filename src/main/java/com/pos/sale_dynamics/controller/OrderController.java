@@ -1,7 +1,8 @@
 package com.pos.sale_dynamics.controller;
 
-import com.pos.sale_dynamics.domain.Order;
 import com.pos.sale_dynamics.dto.OrderDTO;
+import com.pos.sale_dynamics.dto.ProductDTO;
+import com.pos.sale_dynamics.requests.GetInRangeRequest;
 import com.pos.sale_dynamics.requests.PayOrderRequest;
 import com.pos.sale_dynamics.service.OrderService.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,16 @@ public class OrderController {
                 request.excess(),
                 request.customerOwed()
         );
+    }
+
+    @PostMapping("/quantity")
+    public Number getOrderQtyInRange(@RequestBody GetInRangeRequest request) {
+        return orderService.countOrders(request.from(), request.to());
+    }
+
+    @PostMapping("/top-sellings")
+    public List<ProductDTO> getTopSellingProducts(@RequestParam int limit, @RequestBody GetInRangeRequest request) {
+        return orderService.findTopSellingProductsInRange(limit, request.from(), request.to());
     }
 
 }

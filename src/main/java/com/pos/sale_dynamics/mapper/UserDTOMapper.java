@@ -17,6 +17,6 @@ public class UserDTOMapper implements Function<ApplicationUser, UserDTO> {
     public UserDTO apply(ApplicationUser user) {
         List<OrderDTO> orders = user.getOrders().stream().map(order -> orderDTOMapper.apply(order)).toList();
 
-        return new UserDTO(user.getFullName(), user.getUsername(), user.getEmail(), user.getPhone(), user.getAuthorities().stream().toList(), orders);
+        return new UserDTO(user.getFullName(), user.getUsername(), user.getEmail(), user.getPhone(), user.getAuthorities().stream().toList(), orders, user.getChangedPasswordDate(), user.getCreatedDate());
     }
 }

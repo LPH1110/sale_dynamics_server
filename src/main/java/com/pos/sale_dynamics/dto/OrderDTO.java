@@ -1,5 +1,7 @@
 package com.pos.sale_dynamics.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public record OrderDTO(
 
         int customerOwed,
 
-        Date createdDate,
+        LocalDateTime createdDate,
 
         String status,
 
@@ -57,7 +59,7 @@ public record OrderDTO(
     }
 
     @Override
-    public Date createdDate() {
+    public LocalDateTime createdDate() {
         return createdDate;
     }
 

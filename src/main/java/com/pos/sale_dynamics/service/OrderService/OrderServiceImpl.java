@@ -2,7 +2,9 @@ package com.pos.sale_dynamics.service.OrderService;
 
 import com.pos.sale_dynamics.domain.*;
 import com.pos.sale_dynamics.dto.OrderDTO;
+import com.pos.sale_dynamics.dto.ProductDTO;
 import com.pos.sale_dynamics.mapper.OrderDTOMapper;
+import com.pos.sale_dynamics.mapper.ProductDTOMapper;
 import com.pos.sale_dynamics.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,6 +39,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private OrderDTOMapper orderDTOMapper;
+
+    @Autowired
+    private ProductDTOMapper productDTOMapper;
 
 
     @Override
@@ -136,5 +143,21 @@ public class OrderServiceImpl implements OrderService{
             order.setOrderStatus(status);
         }
         return new ResponseEntity<>(orderDTOMapper.apply(orderRepository.save(order)), HttpStatus.ACCEPTED);
+    }
+
+    @Override
+    public Number countOrders(String from, String to) {
+        LocalDateTime fromTime = LocalDateTime.parse(from + "T00:00:00");
+        LocalDateTime toTime = LocalDateTime.parse(to + "T23:59:59");
+        Long number = orderRepository.countOrders(fromTime, toTime);
+        return Objects.requireNonNullElse(number, 0);
+    }
+
+    @Override
+    public List<ProductDTO> findTopSellingProductsInRange(int limit, String from, String to) {
+        LocalDateTime fromTime = LocalDateTime.parse(from + "T00:00:00");
+        LocalDateTime toTime = LocalDateTime.parse(to + "T23:59:59");
+        List<Product> products = orderItemRepository.findTopSellingProductsInRange(limit, fromTime, toTime);
+        return products.stream().map(product -> productDTOMapper.apply(product)).toList();
     }
 }

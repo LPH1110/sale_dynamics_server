@@ -4,6 +4,7 @@ import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.dto.ChangePasswordRequestDTO;
 import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
+import com.pos.sale_dynamics.requests.GetInRangeRequest;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,11 @@ public class UserController {
     @GetMapping("/orders")
     public List<OrderDTO> getOrders(@RequestParam String username) {
         return userService.findOrdersByUsername(username);
+    }
+
+    @PostMapping("/revenue")
+    public Number getRevenue(@RequestBody GetInRangeRequest request) {
+        return userService.calculateRevenue(request.from(), request.to());
     }
 
 

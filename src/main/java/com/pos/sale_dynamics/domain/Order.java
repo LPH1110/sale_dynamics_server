@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +51,7 @@ public class Order {
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
 
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
@@ -71,6 +74,7 @@ public class Order {
     }
 
     public Order(String description, int total, int received, int excess, int customerOwed) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         this.description = description;
         this.total = total;
         this.received = received;
@@ -78,7 +82,7 @@ public class Order {
         this.customerOwed = customerOwed;
         this.orderStatus = null;
         this.orderItems = new ArrayList<>();
-        this.createdDate = new Date();
+        this.createdDate = LocalDateTime.now();
         this.confirmed = false;
         this.issuer = null;
     }

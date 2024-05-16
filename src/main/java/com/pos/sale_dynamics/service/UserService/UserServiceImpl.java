@@ -7,6 +7,7 @@ import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.mapper.OrderDTOMapper;
 import com.pos.sale_dynamics.mapper.UserDTOMapper;
+import com.pos.sale_dynamics.repository.OrderRepository;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -26,6 +28,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -136,4 +141,10 @@ public class UserServiceImpl implements UserDetailsService {
         return "Password changed";
     }
 
+    public Number calculateRevenue(String from, String to) {
+        LocalDateTime fromTime = LocalDateTime.parse(from + "T00:00:00");
+        LocalDateTime toTime = LocalDateTime.parse(to + "T23:59:59");
+        Long number = orderRepository.calculateRevenue(fromTime, toTime);
+        return Objects.requireNonNullElse(number, 0);
+    }
 }

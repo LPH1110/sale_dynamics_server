@@ -2,6 +2,7 @@ package com.pos.sale_dynamics.service.OrderService;
 
 import com.pos.sale_dynamics.domain.Order;
 import com.pos.sale_dynamics.dto.OrderDTO;
+import com.pos.sale_dynamics.dto.ProductDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface OrderService {
     ResponseEntity<OrderDTO> createOrder(OrderDTO orderDTO);
 
     ResponseEntity<OrderDTO> payOrder(String orderId, int received, int excess, int customerOwed);
+
+    Number countOrders(String from, String s);
+
+    List<ProductDTO> findTopSellingProductsInRange(int limit, String from, String to);
 }

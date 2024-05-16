@@ -2,6 +2,7 @@ package com.pos.sale_dynamics.dto;
 
 import com.pos.sale_dynamics.domain.Role;
 
+import java.util.Date;
 import java.util.List;
 
 public record UserDTO (
@@ -10,7 +11,12 @@ public record UserDTO (
         String email,
         String phone,
         List<Role> authorities,
-        List<OrderDTO> orders
+        List<OrderDTO> orders,
+
+        Date changedPasswordDate,
+
+        Date createdDate
+
 ) {
     @Override
     public String fullName() {
@@ -35,6 +41,16 @@ public record UserDTO (
     @Override
     public List<Role> authorities() {
         return authorities;
+    }
+
+    @Override
+    public Date changedPasswordDate() {
+        return changedPasswordDate;
+    }
+
+    @Override
+    public Date createdDate() {
+        return createdDate;
     }
 
     @Override
