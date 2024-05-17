@@ -4,6 +4,7 @@ import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.ProductDTO;
 import com.pos.sale_dynamics.requests.GetInRangeRequest;
 import com.pos.sale_dynamics.requests.PayOrderRequest;
+import com.pos.sale_dynamics.responses.TopSellingProductResponse;
 import com.pos.sale_dynamics.service.OrderService.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class OrderController {
     }
 
     @PostMapping("/top-sellings")
-    public List<ProductDTO> getTopSellingProducts(@RequestParam int limit, @RequestBody GetInRangeRequest request) {
+    public List<TopSellingProductResponse> getTopSellingProducts(@RequestParam int limit, @RequestBody GetInRangeRequest request) {
         return orderService.findTopSellingProductsInRange(limit, request.from(), request.to());
     }
 

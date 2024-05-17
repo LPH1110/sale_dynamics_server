@@ -3,6 +3,7 @@ package com.pos.sale_dynamics.service.OrderService;
 import com.pos.sale_dynamics.domain.Order;
 import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.ProductDTO;
+import com.pos.sale_dynamics.responses.TopSellingProductResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface OrderService {
 
     Number countOrders(String from, String s);
 
-    List<ProductDTO> findTopSellingProductsInRange(int limit, String from, String to);
+    List<TopSellingProductResponse> findTopSellingProductsInRange(int limit, String from, String to);
 }

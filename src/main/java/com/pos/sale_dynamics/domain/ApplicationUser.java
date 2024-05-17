@@ -25,6 +25,7 @@ public class ApplicationUser implements UserDetails {
     private String phone;
     private String avatarURL;
     private Boolean enabled = true;
+    private Boolean blocked = false;
     private Date createdDate;
     private Date changedPasswordDate;
 

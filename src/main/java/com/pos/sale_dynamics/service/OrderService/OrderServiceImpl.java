@@ -2,10 +2,11 @@ package com.pos.sale_dynamics.service.OrderService;
 
 import com.pos.sale_dynamics.domain.*;
 import com.pos.sale_dynamics.dto.OrderDTO;
-import com.pos.sale_dynamics.dto.ProductDTO;
+import com.pos.sale_dynamics.dto.TopSellingProductDTO;
 import com.pos.sale_dynamics.mapper.OrderDTOMapper;
 import com.pos.sale_dynamics.mapper.ProductDTOMapper;
 import com.pos.sale_dynamics.repository.*;
+import com.pos.sale_dynamics.responses.TopSellingProductResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -154,10 +155,15 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<ProductDTO> findTopSellingProductsInRange(int limit, String from, String to) {
+    public List<TopSellingProductResponse> findTopSellingProductsInRange(int limit, String from, String to) {
         LocalDateTime fromTime = LocalDateTime.parse(from + "T00:00:00");
         LocalDateTime toTime = LocalDateTime.parse(to + "T23:59:59");
-        List<Product> products = orderItemRepository.findTopSellingProductsInRange(limit, fromTime, toTime);
-        return products.stream().map(product -> productDTOMapper.apply(product)).toList();
+        List<TopSellingProductDTO> products = orderItemRepository.findTopSellingProductsInRange(limit, fromTime, toTime);
+
+        return products.stream().map(topDTO -> new TopSellingProductResponse(
+                productDTOMapper.apply(topDTO.product),
+                topDTO.quantity,
+                topDTO.product.getSalePrice() * topDTO.quantity
+        )).toList();
     }
 }

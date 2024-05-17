@@ -19,7 +19,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findById(String orderId);
 
     @Query("SELECT SUM(o.total) FROM Order o WHERE o.createdDate >= ?1 AND o.createdDate <= ?2")
-    Long calculateRevenue(LocalDateTime  from, LocalDateTime to);
+    Long calculateRevenueInRange(LocalDateTime  from, LocalDateTime to);
+
+    @Query("SELECT SUM(o.total) FROM Order o")
+    Long calculateRevenue();
 
     @Query("SELECT COUNT(o.id) FROM Order o WHERE o.createdDate >= ?1 AND o.createdDate <= ?2")
     Long countOrders(LocalDateTime  from, LocalDateTime to);

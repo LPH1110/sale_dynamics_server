@@ -144,7 +144,29 @@ public class UserServiceImpl implements UserDetailsService {
     public Number calculateRevenue(String from, String to) {
         LocalDateTime fromTime = LocalDateTime.parse(from + "T00:00:00");
         LocalDateTime toTime = LocalDateTime.parse(to + "T23:59:59");
-        Long number = orderRepository.calculateRevenue(fromTime, toTime);
+        Long number = orderRepository.calculateRevenueInRange(fromTime, toTime);
         return Objects.requireNonNullElse(number, 0);
+    }
+
+    public ResponseEntity<String> block(String username) {
+        Optional<ApplicationUser> userRecord = userRepository.findByUsername(username);
+        if (userRecord.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        ApplicationUser user = userRecord.get();
+        user.setBlocked(true);
+        userRepository.save(user);
+        return new ResponseEntity<>("Blocked user with username: " + user.getUsername() + " successfully!", HttpStatus.OK);
+     }
+
+    public ResponseEntity<String> unblock(String username) {
+        Optional<ApplicationUser> userRecord = userRepository.findByUsername(username);
+        if (userRecord.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        ApplicationUser user = userRecord.get();
+        user.setBlocked(false);
+        userRepository.save(user);
+        return new ResponseEntity<>("Unblocked user: " + user.getUsername() + " successfully!", HttpStatus.OK);
     }
 }

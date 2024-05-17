@@ -15,7 +15,9 @@ public record UserDTO (
 
         Date changedPasswordDate,
 
-        Date createdDate
+        Date createdDate,
+
+        boolean blocked
 
 ) {
     @Override
@@ -56,5 +58,10 @@ public record UserDTO (
     @Override
     public List<OrderDTO> orders() {
         return orders;
+    }
+
+    @Override
+    public boolean blocked() {
+        return blocked;
     }
 }

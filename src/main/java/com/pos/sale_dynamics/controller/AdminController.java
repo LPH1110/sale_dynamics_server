@@ -5,6 +5,7 @@ import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +17,6 @@ import java.util.Optional;
 public class AdminController {
     @Autowired
     private UserServiceImpl userService;
-    @GetMapping
-    public String getInfo() {
-        return "admin level access";
-    }
 
     @GetMapping("/users")
     public List<UserDTO> getUsers() {
@@ -33,7 +30,16 @@ public class AdminController {
 
     @GetMapping("/generate-verify-token")
     public String generateVerifyToken(@RequestParam String username) {
-        System.out.println(username + "\n");
         return userService.getVerifyToken(username);
+    }
+
+    @GetMapping("/user/block")
+    public ResponseEntity<String> blockUser(@RequestParam String username) {
+        return userService.block(username);
+    }
+
+    @GetMapping("/user/unblock")
+    public ResponseEntity<String> unblockUser(@RequestParam String username) {
+        return userService.unblock(username);
     }
 }
