@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +25,8 @@ import java.util.UUID;
     private String name;
     private String description;
     private String provider;
+
+    private LocalDateTime deletedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
@@ -80,6 +84,7 @@ import java.util.UUID;
         this.comparedPrice = comparedPrice;
         this.sku = sku;
         this.barcode = barcode;
+        this.deletedAt = null;
     }
 
     public Product() {
@@ -93,6 +98,7 @@ import java.util.UUID;
         this.comparedPrice = 0;
         this.sku = null;
         this.barcode = null;
+        this.deletedAt = null;
     }
 }
 

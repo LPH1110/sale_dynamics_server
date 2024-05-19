@@ -13,4 +13,5 @@ public record CldUploadResponse(
     public String url() {
         return url;
     }
+
 }

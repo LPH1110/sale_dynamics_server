@@ -5,6 +5,7 @@ import com.pos.sale_dynamics.domain.Category;
 import com.pos.sale_dynamics.domain.Thumbnail;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProductDTO(
@@ -15,6 +16,8 @@ public record ProductDTO(
          String baseUnit,
          String sku,
          String barcode,
+
+         LocalDateTime deletedAt,
          List<Thumbnail> thumbnails,
          List<PropertyDTO> properties,
          int salePrice,
@@ -54,5 +57,10 @@ public record ProductDTO(
     }
     public int comparedPrice() {
         return comparedPrice;
+    }
+
+    @Override
+    public LocalDateTime deletedAt() {
+        return deletedAt;
     }
 }

@@ -1,6 +1,7 @@
 package com.pos.sale_dynamics.service.CloudinaryService;
 
 import com.cloudinary.utils.ObjectUtils;
+import com.pos.sale_dynamics.dto.CropRatioDTO;
 import com.pos.sale_dynamics.responses.CldUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,5 +49,25 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         fo.write(multipartFile.getBytes());
         fo.close();
         return file;
+    }
+
+    private BufferedImage cropImageSquare(BufferedImage image, CropRatioDTO crop) {
+        int height = image.getHeight();
+        int width = image.getWidth();
+
+        // Compute the size of the square
+        int squareSize = Math.min(height, width);
+
+        // Coordinates of the image's middle
+        int xc = width / 2;
+        int yc = height / 2;
+
+        // Crop
+        return image.getSubimage(
+                xc - (squareSize / 2), // x coordinate of the upper-left corner
+                yc - (squareSize / 2), // y coordinate of the upper-left corner
+                squareSize, // width
+                squareSize  // height
+        );
     }
 }

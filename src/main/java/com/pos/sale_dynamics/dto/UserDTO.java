@@ -10,6 +10,7 @@ public record UserDTO (
         String username,
         String email,
         String phone,
+        String avatarURL,
         List<Role> authorities,
         List<OrderDTO> orders,
 
@@ -63,5 +64,10 @@ public record UserDTO (
     @Override
     public boolean blocked() {
         return blocked;
+    }
+
+    @Override
+    public String avatarURL() {
+        return avatarURL;
     }
 }

@@ -1,16 +1,15 @@
 package com.pos.sale_dynamics.service.UserService;
 
-import com.pos.sale_dynamics.domain.ApplicationUser;
-import com.pos.sale_dynamics.domain.Role;
-import com.pos.sale_dynamics.domain.VerificationToken;
+import com.pos.sale_dynamics.domain.*;
+import com.pos.sale_dynamics.dto.CropRatioDTO;
 import com.pos.sale_dynamics.dto.OrderDTO;
 import com.pos.sale_dynamics.dto.UserDTO;
 import com.pos.sale_dynamics.mapper.OrderDTOMapper;
 import com.pos.sale_dynamics.mapper.UserDTOMapper;
-import com.pos.sale_dynamics.repository.OrderRepository;
-import com.pos.sale_dynamics.repository.RoleRepository;
-import com.pos.sale_dynamics.repository.UserRepository;
-import com.pos.sale_dynamics.repository.VerificationTokenRepository;
+import com.pos.sale_dynamics.repository.*;
+import com.pos.sale_dynamics.responses.CldUploadResponse;
+import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserDetailsService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private ThumbnailRepository thumbnailRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -46,6 +50,10 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     private OrderDTOMapper orderDTOMapper;
+
+
+    @Autowired
+    private CloudinaryServiceImpl cloudinaryService;
 
     public List<OrderDTO> findOrdersByUsername(String username) {
         Optional<ApplicationUser> user = userRepository.findByUsername(username);
@@ -168,5 +176,23 @@ public class UserServiceImpl implements UserDetailsService {
         user.setBlocked(false);
         userRepository.save(user);
         return new ResponseEntity<>("Unblocked user: " + user.getUsername() + " successfully!", HttpStatus.OK);
+    }
+
+    public ResponseEntity<CldUploadResponse> changeAvatar(MultipartFile thumbnailFile, String username) {
+        Optional<ApplicationUser> userRecord = userRepository.findByUsername(username);
+
+        if (userRecord.isPresent()) {
+            ApplicationUser user = userRecord.get();
+            try {
+                CldUploadResponse asset = cloudinaryService.upload(thumbnailFile);
+                user.setAvatarURL(asset.url());
+                userRepository.save(user);
+                return new ResponseEntity<>(asset, HttpStatus.OK);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }

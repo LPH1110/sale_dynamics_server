@@ -19,7 +19,7 @@ import java.util.List;
 
         List<ProductDTO> findByNameContaining(String infix);
 
-        ProductDTO findByBarcode(String barcode);
+        ResponseEntity<ProductDTO> findByBarcode(String barcode);
 
         Thumbnail saveThumbnail(String barcode, MultipartFile thumbnailFile);
 

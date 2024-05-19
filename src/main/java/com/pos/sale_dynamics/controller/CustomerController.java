@@ -25,6 +25,11 @@ public class CustomerController {
         return customerService.create(customerDTO);
     }
 
+    @GetMapping("/detail")
+    public ResponseEntity<CustomerDTO> getCustomer(@RequestParam String phone) {
+        return customerService.findByPhone(phone);
+    }
+
     @GetMapping("/keyword")
     public List<CustomerDTO> getByKeyWord(@RequestParam String infix) {
         return customerService.findByKeyword(infix);

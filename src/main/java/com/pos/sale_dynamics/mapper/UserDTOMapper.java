@@ -22,6 +22,7 @@ public class UserDTOMapper implements Function<ApplicationUser, UserDTO> {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhone(),
+                user.getAvatarURL(),
                 user.getAuthorities().stream().toList(),
                 orders,
                 user.getChangedPasswordDate(),

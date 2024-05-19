@@ -1,6 +1,7 @@
 package com.pos.sale_dynamics.service.ProductService;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -117,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        return productRepository.findAll().stream().map(product -> productMapper.apply(product)).toList();
+        return productRepository.findExistingProducts().stream().map(product -> productMapper.apply(product)).toList();
     }
 
 
@@ -129,9 +131,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductDTO findByBarcode(String barcode)  {
-        Product product = productRepository.findByBarcode(barcode).get();
-        return productMapper.apply(product);
+    public ResponseEntity<ProductDTO> findByBarcode(String barcode)  {
+        Optional<Product> productRecord = productRepository.findByBarcode(barcode);
+        return productRecord.map(product -> new ResponseEntity<>(productMapper.apply(product), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
     }
 
     @Override
@@ -176,5 +179,15 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
 
         return HttpStatus.OK;
+    }
+
+    public ResponseEntity<String> deleteByBarcode(List<String> barcodes) {
+        barcodes.forEach(code -> {
+            Product product = productRepository.findByBarcode(code).get();
+            product.setDeletedAt(LocalDateTime.now());
+            productRepository.save(product);
+        });
+        return new ResponseEntity<>("Deleted products successfully!", HttpStatus.OK);
+
     }
 }

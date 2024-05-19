@@ -50,12 +50,17 @@ public class ProductController {
     }
 
     @GetMapping("/detail")
-    public ProductDTO getDetail(@RequestParam String barcode) {
+    public ResponseEntity<ProductDTO> getDetail(@RequestParam String barcode) {
         return productService.findByBarcode(barcode);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO) {
         return productService.updateProduct(productDTO);
+    }
+
+    @PostMapping("/disable")
+    public ResponseEntity<String> deleteProduct(@RequestBody List<String> barcodes) {
+        return productService.deleteByBarcode(barcodes);
     }
 }

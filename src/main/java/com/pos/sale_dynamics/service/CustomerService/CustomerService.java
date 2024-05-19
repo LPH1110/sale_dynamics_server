@@ -13,4 +13,6 @@ public interface CustomerService {
     ResponseEntity<CustomerDTO> create(CustomerDTO customerDTO);
 
     List<CustomerDTO> findByKeyword(String infix);
+
+    ResponseEntity<CustomerDTO> findByPhone(String phone);
 }

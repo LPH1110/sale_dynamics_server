@@ -51,6 +51,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                 product.getBaseUnit(),
                 product.getSku(),
                 product.getBarcode(),
+                product.getDeletedAt(),
                 product.getThumbnails(),
                 properties,
                 product.getSalePrice(),
