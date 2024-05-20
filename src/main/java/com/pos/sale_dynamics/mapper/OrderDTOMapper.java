@@ -37,9 +37,7 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
         String status = order.getOrderStatus().getTitle();
 
         // order items
-        List<OrderItemDTO> orderItemDTOList = order.getOrderItems().stream().map(item -> {
-            return orderItemDTOMapper.apply(item);
-        }).toList();
+        List<OrderItemDTO> orderItemDTOList = order.getOrderItems().stream().map(item -> orderItemDTOMapper.apply(item)).toList();
 
         return new OrderDTO(
                 order.getId(),

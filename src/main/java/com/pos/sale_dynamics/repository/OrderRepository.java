@@ -27,4 +27,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT COUNT(o.id) FROM Order o WHERE o.createdDate >= ?1 AND o.createdDate <= ?2")
     Long countOrders(LocalDateTime  from, LocalDateTime to);
 
+    @Query("SELECT o FROM Order o JOIN Customer c ON c.id = o.customer.id WHERE c.phone = ?1 ORDER BY o.createdDate DESC")
+    List<Order> findOrderByCustomerPhone(String phone);
 }

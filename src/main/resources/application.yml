@@ -3,6 +3,8 @@
 #spring.redis.port=6379
 
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: sale_dynamics
   datasource:

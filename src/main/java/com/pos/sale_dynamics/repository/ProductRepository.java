@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product,String> {
     @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL")
     List<Product> findExistingProducts();
 
-    @Query("SELECT p FROM Product p WHERE p.name LIKE %:infix% OR p.barcode LIKE %:infix% OR p.sku LIKE %:infix% ORDER BY id LIMIT 50")
+    @Query("SELECT p FROM Product p WHERE p.deletedAt IS NULL AND p.name LIKE %:infix% OR p.barcode LIKE %:infix% OR p.sku LIKE %:infix% ORDER BY id LIMIT 50")
     List<Product> findByNameContaining(@Param("infix") String infix);
 
     @Query("SELECT p FROM Product p WHERE p.barcode = ?1 AND p.deletedAt IS NULL")

@@ -1,5 +1,7 @@
 package com.pos.sale_dynamics.dto;
 
+import java.util.List;
+
 public record CustomerDTO(
         String lastname,
         String firstname,
@@ -37,4 +39,5 @@ public record CustomerDTO(
     public String address() {
         return address;
     }
+
 }

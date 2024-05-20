@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,6 +30,9 @@ public class Customer {
     private String phone;
 
     private String address;
+
+    private LocalDateTime createdDate;
+
     private String gender;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
@@ -41,6 +45,7 @@ public class Customer {
         this.phone = "";
         this.address = "";
         this.gender = "";
+        this.createdDate = LocalDateTime.now();
     }
 
     public Customer(String lastname, String firstname, String email, String phone, String address, String gender) {
@@ -50,5 +55,6 @@ public class Customer {
         this.phone = phone;
         this.address = address;
         this.gender = gender;
+        this.createdDate = LocalDateTime.now();
     }
 }
