@@ -3,6 +3,7 @@ package com.pos.sale_dynamics.controller;
 import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.domain.VerificationToken;
 import com.pos.sale_dynamics.dto.UserDTO;
+import com.pos.sale_dynamics.responses.CreateUserResponse;
 import com.pos.sale_dynamics.service.UserService.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AdminController {
     }
 
     @PostMapping("/create")
-    public VerificationToken createUser(@RequestBody ApplicationUser userInfo) {
+    public ResponseEntity<CreateUserResponse> createUser(@RequestBody ApplicationUser userInfo) {
         return userService.createUser(userInfo.getFullName(), userInfo.getEmail(), userInfo.getPassword(), userInfo.getPhone());
     }
 

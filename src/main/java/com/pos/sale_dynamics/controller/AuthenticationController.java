@@ -4,6 +4,7 @@ import com.pos.sale_dynamics.domain.ApplicationUser;
 import com.pos.sale_dynamics.dto.LoginResponseDTO;
 import com.pos.sale_dynamics.dto.RegistrationDTO;
 import com.pos.sale_dynamics.dto.TokenVerifyResponse;
+import com.pos.sale_dynamics.responses.LoginResponse;
 import com.pos.sale_dynamics.service.AuthenticationService.AuthenticationService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO loginUser(@RequestBody RegistrationDTO body)  {
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody RegistrationDTO body)  {
         return authenticationService.loginUser(body.getUsername(), body.getPassword());
     }
 

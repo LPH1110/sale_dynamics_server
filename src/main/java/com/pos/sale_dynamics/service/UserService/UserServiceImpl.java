@@ -8,6 +8,7 @@ import com.pos.sale_dynamics.mapper.OrderDTOMapper;
 import com.pos.sale_dynamics.mapper.UserDTOMapper;
 import com.pos.sale_dynamics.repository.*;
 import com.pos.sale_dynamics.responses.CldUploadResponse;
+import com.pos.sale_dynamics.responses.CreateUserResponse;
 import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
 import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,12 @@ public class UserServiceImpl implements UserDetailsService {
         return new ResponseEntity<>(userDTOMapper.apply(user.get()), HttpStatus.OK);
     }
 
-    public VerificationToken createUser(String fullName, String email, String password, String phone) {
+    public ResponseEntity<CreateUserResponse> createUser(String fullName, String email, String password, String phone) {
+         Optional<ApplicationUser> user = userRepository.findByEmail(email);
+         if (user.isPresent()) {
+             return new ResponseEntity<>(new CreateUserResponse(true, "Email has been already existed", null), HttpStatus.METHOD_NOT_ALLOWED);
+         }
+
         // Encode password
         String encodedPassword = passwordEncoder.encode(password.isEmpty() ? "123" : password);
         String username = email.split("@")[0];
@@ -108,7 +114,7 @@ public class UserServiceImpl implements UserDetailsService {
 
         verificationTokenRepository.save(verifyToken);
 
-        return verifyToken;
+        return new ResponseEntity<>(new CreateUserResponse(false, "Account created successfully", verifyToken), HttpStatus.CREATED);
     }
 
     public String getVerifyToken(String username) {

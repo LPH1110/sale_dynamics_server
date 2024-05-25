@@ -27,6 +27,7 @@ public class UserDTOMapper implements Function<ApplicationUser, UserDTO> {
                 orders,
                 user.getChangedPasswordDate(),
                 user.getCreatedDate(),
+                user.isEnabled(),
                 user.getBlocked()
         );
     }

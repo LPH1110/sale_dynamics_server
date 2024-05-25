@@ -8,7 +8,9 @@ import com.pos.sale_dynamics.mapper.UserDTOMapper;
 import com.pos.sale_dynamics.repository.RoleRepository;
 import com.pos.sale_dynamics.repository.UserRepository;
 import com.pos.sale_dynamics.repository.VerificationTokenRepository;
+import com.pos.sale_dynamics.responses.LoginResponse;
 import com.pos.sale_dynamics.service.TokenService;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,7 @@ public class AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     @Autowired
     private AuthenticationManager authManager;
 
@@ -59,18 +62,28 @@ public class AuthenticationService {
         return userRepository.save(newUser);
     }
 
-    public LoginResponseDTO loginUser(String username, String password) {
+    public ResponseEntity<LoginResponse> loginUser(String username, String password) {
         System.out.println("Logging in: " + username + " - " + password);
 
-        try {
-            Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            String token = tokenService.generateToken(auth);
-            ApplicationUser user = userRepository.findByUsername(username).get();
-            return new LoginResponseDTO(userDTOMapper.apply(user), token);
+        Optional<ApplicationUser> userRecord = userRepository.findByUsername(username);
+        if (userRecord.isEmpty()) {
+            return new ResponseEntity<>(new LoginResponse(true, "Username doesn't exist", null), HttpStatus.NOT_FOUND);
+        } else if (!passwordEncoder.matches(password, userRecord.get().getPassword())) {
+            return new ResponseEntity<>(new LoginResponse(true, "Wrong password", null), HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            try {
+                Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                String token = tokenService.generateToken(auth);
+                ApplicationUser user = userRecord.get();
+                LoginResponseDTO loginResponseDTO = new LoginResponseDTO(userDTOMapper.apply(user), token);
 
-        } catch (AuthenticationException e) {
-            System.out.println(e.getMessage());
-            return new LoginResponseDTO(null, "");
+                return new ResponseEntity<>(new LoginResponse(false, "Logged successfully", loginResponseDTO), HttpStatus.ACCEPTED);
+
+
+            } catch (AuthenticationException e) {
+                System.out.println(e.getMessage());
+                return new ResponseEntity<>(new LoginResponse(true, e.getMessage(), null), HttpStatus.NOT_FOUND);
+            }
         }
     }
 

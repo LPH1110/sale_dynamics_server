@@ -12,6 +12,7 @@ import com.pos.sale_dynamics.mapper.CreateProductMapper;
 import com.pos.sale_dynamics.mapper.ProductDTOMapper;
 import com.pos.sale_dynamics.repository.*;
 import com.pos.sale_dynamics.responses.CldUploadResponse;
+import com.pos.sale_dynamics.responses.DisableProductResponse;
 import com.pos.sale_dynamics.service.CloudinaryService.CloudinaryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public List<ProductDTO> findByNameContaining(String infix) {
@@ -181,13 +185,16 @@ public class ProductServiceImpl implements ProductService {
         return HttpStatus.OK;
     }
 
-    public ResponseEntity<String> deleteByBarcode(List<String> barcodes) {
-        barcodes.forEach(code -> {
-            Product product = productRepository.findByBarcode(code).get();
-            product.setDeletedAt(LocalDateTime.now());
-            productRepository.save(product);
-        });
-        return new ResponseEntity<>("Deleted products successfully!", HttpStatus.OK);
+    public ResponseEntity<DisableProductResponse> deleteByBarcode(String barcode) {
+            List<Order> orders = orderRepository.findByProductBarcode(barcode);
+            if (orders.isEmpty()) {
+                Product product = productRepository.findByBarcode(barcode).get();
+                product.setDeletedAt(LocalDateTime.now());
+                productRepository.save(product);
+                return new ResponseEntity<>(new DisableProductResponse(false, "Product disabled successfully"), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(new DisableProductResponse(true, "Product cannot be disabled because of being in an order"), HttpStatus.METHOD_NOT_ALLOWED);
+            }
 
     }
 }

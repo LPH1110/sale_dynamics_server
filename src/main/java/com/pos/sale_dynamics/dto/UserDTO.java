@@ -18,6 +18,8 @@ public record UserDTO (
 
         Date createdDate,
 
+        boolean enabled,
+
         boolean blocked
 
 ) {
@@ -64,6 +66,11 @@ public record UserDTO (
     @Override
     public boolean blocked() {
         return blocked;
+    }
+
+    @Override
+    public boolean enabled() {
+        return enabled;
     }
 
     @Override

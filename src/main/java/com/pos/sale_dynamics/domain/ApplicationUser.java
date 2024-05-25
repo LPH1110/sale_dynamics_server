@@ -3,7 +3,6 @@ package com.pos.sale_dynamics.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
@@ -21,6 +20,8 @@ public class ApplicationUser implements UserDetails {
     private String username;
     private String password;
     private String fullName;
+
+    @Column(unique = true)
     private String email;
     private String phone;
     private String avatarURL;

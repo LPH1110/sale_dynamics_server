@@ -3,6 +3,7 @@ package com.pos.sale_dynamics.controller;
 import com.pos.sale_dynamics.domain.Thumbnail;
 import com.pos.sale_dynamics.requests.CreateProductRequest;
 import com.pos.sale_dynamics.requests.DeleteThumbnailRequest;
+import com.pos.sale_dynamics.responses.DisableProductResponse;
 import com.pos.sale_dynamics.service.ProductService.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,8 +60,8 @@ public class ProductController {
         return productService.updateProduct(productDTO);
     }
 
-    @PostMapping("/disable")
-    public ResponseEntity<String> deleteProduct(@RequestBody List<String> barcodes) {
-        return productService.deleteByBarcode(barcodes);
+    @GetMapping("/disable")
+    public ResponseEntity<DisableProductResponse> deleteProduct(@RequestParam String barcode) {
+        return productService.deleteByBarcode(barcode);
     }
 }

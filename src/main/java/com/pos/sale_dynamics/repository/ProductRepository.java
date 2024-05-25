@@ -19,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product,String> {
 
     @Query("SELECT p FROM Product p WHERE p.barcode = ?1 AND p.deletedAt IS NULL")
     Optional<Product> findByBarcode(String barcode);
+
+
 }

@@ -29,4 +29,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o JOIN Customer c ON c.id = o.customer.id WHERE c.phone = ?1 ORDER BY o.createdDate DESC")
     List<Order> findOrderByCustomerPhone(String phone);
+
+    @Query("SELECT o FROM Order o JOIN OrderItem oi ON oi.order.id = o.id JOIN Product p ON p.id = oi.product.id WHERE p.barcode = ?1")
+    List<Order> findByProductBarcode(String barcode);
 }
